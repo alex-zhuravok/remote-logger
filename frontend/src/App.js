@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import LogTable from './components/LogTable'
 import logo from './logo.svg';
