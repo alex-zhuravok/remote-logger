@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LogItem from './LogItem';
 
 class LogTable extends Component {
     state = {
@@ -25,13 +26,7 @@ class LogTable extends Component {
                     <tbody>
                         {
                             this.state.logs.map(logItem =>
-                                <tr key={logItem._id}>
-                                    <td>{logItem.id}</td>
-                                    <td>{logItem.moment}</td>
-                                    <td>{logItem.type}</td>
-                                    <td>{logItem.message}</td>
-                                    <td></td>
-                                </tr>
+                                <LogItem key={logItem._id} item={logItem} />
                         )}
                     </tbody>
                 </table>
