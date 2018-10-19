@@ -1,19 +1,36 @@
 const MongoClient = require('mongodb').MongoClient;
-const connectionString = "mongodb://localhost:27017/";
-const dbName = "remote-logger-db";
+const DbModel = require('./dbModel');
 
-const DbContext = function () {
-    this.run = function(callback) {
-        MongoClient.connect(connectionString, function(err, client) {
+class DbContext {
 
-            if (err) {
-                return console.log(err);
-            }
+    constructor() {
+        this.connectionString = "mongodb://localhost:27017/";
+        this.dbName = "remote-logger-db";
+        
+        this.accounts = new DbModel(this, "accounts");
+        this.applications = new DbModel(this, "applications");
+        this.instances = new DbModel(this, "instances");
+        this.instanceGroups = new DbModel(this, "instanceGroups");
+        this.logs = new DbModel(this, "logRecords");
+    }
 
-            let db = client.db(dbName);
-            callback(db);
-            client.close();
-        });
+    connect() {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(this.connectionString)
+                .then((client, err) => {
+                    if (err) {
+                        console.log(err);
+                        reject();
+                    }
+                    else {
+                        let db = client.db(this.dbName);
+                        resolve(db)
+                            .then(() => {
+                                client.close();
+                            });
+                    }
+                });
+        });   
     }
 }
 
